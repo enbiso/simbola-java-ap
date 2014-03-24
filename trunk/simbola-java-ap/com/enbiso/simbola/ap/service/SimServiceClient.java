@@ -8,9 +8,6 @@ import com.google.gson.JsonSyntaxException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.protocol.HTTP;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
 /**
@@ -77,7 +74,7 @@ public class SimServiceClient {
     public SimServiceClient(SimConnection connection){
         this.connection = connection;
         if(httpClient == null){
-            httpClient = HttpClients.createDefault();
+            httpClient = new DefaultHttpClient();
         }
     }
     
@@ -91,7 +88,7 @@ public class SimServiceClient {
         this.module = module;
         this.service = service;
         this.action = action;
-        this.params = new HashMap<>();        
+        this.params = new HashMap();
     }
 
     /**
@@ -126,7 +123,7 @@ public class SimServiceClient {
      */
     public SimServiceResponse execute(){
         Gson gson = new Gson();
-        List<BasicNameValuePair> postParameters = new ArrayList<>();
+        List<BasicNameValuePair> postParameters = new ArrayList<BasicNameValuePair>();
         //Service source info
         postParameters.add(new BasicNameValuePair("module", module));
         postParameters.add(new BasicNameValuePair("service", service));
@@ -149,7 +146,11 @@ public class SimServiceClient {
             String output = convertInputStreamToString(stream);
             Map outputMap = gson.fromJson(output, Map.class);
             return new SimServiceResponse(outputMap);
-        }catch (JsonSyntaxException | IOException | IllegalStateException ex){
+        }catch (JsonSyntaxException ex){
+            ex.printStackTrace();
+        }catch (IOException ex) {
+            ex.printStackTrace();
+        }catch (IllegalStateException ex){
             ex.printStackTrace();
         }
         return null;
