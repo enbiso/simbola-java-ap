@@ -104,7 +104,11 @@ public class SimServiceResponse {
      * @return 
      */
     public Object getBody(String name){
-        return this.body.get(name);
+        if(this.body.containsKey(name)){
+            return this.body.get(name);
+        }else{
+            return null;
+        }
     }
     
     /**
@@ -130,7 +134,12 @@ public class SimServiceResponse {
      * @return 
      */
     public <T> T getResponse(Class<T> type){
-        return (T)this.getBody(BODY_RESPONSE);
+        Object data = this.getBody(BODY_RESPONSE);
+        if(data != null){
+            return (T)data;
+        }else{
+            return null;
+        }
     }
     
     /**
