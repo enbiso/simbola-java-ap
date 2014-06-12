@@ -18,11 +18,11 @@ public class SimConnection {
     /**
      * Username
      */
-    private final String username;
+    private String username;
     /**
      * Password
      */
-    private final String password;
+    private String password;
     /**
      * Session instance
      */
@@ -31,14 +31,31 @@ public class SimConnection {
     /**
      * Sim Connection constructor
      * @param connectionUrl Connection URL
+     */
+    public SimConnection(String connectionUrl){
+        this.connectionUrl = connectionUrl;
+        this.session = new SimSession(GUEST_USERNAME, "");
+    }
+
+    /**
+     * Sim Connection constructor
+     * @param connectionUrl Connection URL
      * @param username Username
      * @param password Password
      */
-    public SimConnection(String connectionUrl, String username, String password) {
-        this.connectionUrl = connectionUrl;
+    public SimConnection(String connectionUrl, String username, String password) {        
+        this(connectionUrl);
+        setLoginCredentials(username, password);
+    }
+
+    /**
+     * Set Login details
+     * @param username Username
+     * @param password Password
+     */
+    public void setLoginCredentials(String username, String password){
         this.username = username;
         this.password = password;
-        this.session = new SimSession(GUEST_USERNAME, "");
     }
 
     /**
@@ -68,6 +85,17 @@ public class SimConnection {
         }
     }
 
+    public boolean logout(){
+        SimServiceClient client = new SimServiceClient(this, "system", "auth", "logout");
+        SimServiceResponse response = client.execute();
+        if(response.checkStatusOk()){
+            this.session = new SimSession(GUEST_USERNAME, "");
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     /**
      * Returns the connection URL
      * @return Connection URL
@@ -82,5 +110,21 @@ public class SimConnection {
      */
     public SimSession getSession() {
         return session;
+    }
+
+    /**
+     * Returns username
+     * @return Username
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * Returns password
+     * @return Password
+     */
+    public String getPassword() {
+        return password;
     }
 }
