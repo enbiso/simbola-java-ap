@@ -16,12 +16,12 @@ public class SimSession {
 
     /**
      * Create a simbola session instance
-     * @param skey Session Key
      * @param username Username
+     * @param skey Session Key
      */
-    public SimSession(String skey, String username) {
-        this.skey = skey;
+    public SimSession(String username, String skey) {
         this.username = username;
+        this.skey = skey;
     }
 
     /**
