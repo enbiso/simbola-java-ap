@@ -1,6 +1,8 @@
 package com.enbiso.simbola.ap;
 
 import com.enbiso.simbola.ap.connection.SimConnection;
+import com.google.gson.JsonSyntaxException;
+import java.io.IOException;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -30,8 +32,14 @@ public class AppTest extends TestCase {
      * Rigourous Test :-)
      */
     public void testConnection() {
-        SimConnection connection = new SimConnection("http://dev-ctcinv.proj.enbiso.com", "injas", "injas");
-        boolean output = connection.login();
-        assertTrue(output);
+        try {
+            SimConnection connection = new SimConnection("http://dev-ctcinv.proj.enbiso.com", "injas", "injas");
+            boolean output = connection.login();
+            assertTrue(output);
+        } catch (JsonSyntaxException e) {
+            assertTrue(false);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
     }
 }
