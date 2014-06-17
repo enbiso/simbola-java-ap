@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 
@@ -13,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -121,7 +123,7 @@ public class SimServiceClient {
      * Execute the service call
      * @return Simbola Response
      */
-    public SimServiceResponse execute(){
+    public SimServiceResponse execute() throws JsonSyntaxException, IOException{
         Gson gson = new Gson();
         List<BasicNameValuePair> postParameters = new ArrayList<BasicNameValuePair>();
         //Service source info
@@ -138,22 +140,13 @@ public class SimServiceClient {
             String value = entry.getValue();
             postParameters.add(new BasicNameValuePair("params[" + key + "]", value));        
         }
-        try {         
-            HttpPost request = new HttpPost(getServiceUrl());                                    
-            request.setEntity(new UrlEncodedFormEntity(postParameters));
-            HttpResponse response = httpClient.execute(request);
-            InputStream stream = response.getEntity().getContent();
-            String output = convertInputStreamToString(stream);
-            Map outputMap = gson.fromJson(output, Map.class);
-            return new SimServiceResponse(outputMap);
-        }catch (JsonSyntaxException ex){
-            ex.printStackTrace();
-        }catch (IOException ex) {
-            ex.printStackTrace();
-        }catch (IllegalStateException ex){
-            ex.printStackTrace();
-        }
-        return null;
+        HttpPost request = new HttpPost(getServiceUrl());
+        request.setEntity(new UrlEncodedFormEntity(postParameters));
+        HttpResponse response = httpClient.execute(request);
+        InputStream stream = response.getEntity().getContent();
+        String output = convertInputStreamToString(stream);
+        Map outputMap = gson.fromJson(output, Map.class);
+        return new SimServiceResponse(outputMap);
     }
 
     /**

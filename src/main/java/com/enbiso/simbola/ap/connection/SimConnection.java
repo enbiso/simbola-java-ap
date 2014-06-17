@@ -2,6 +2,10 @@ package com.enbiso.simbola.ap.connection;
 
 import com.enbiso.simbola.ap.service.SimServiceClient;
 import com.enbiso.simbola.ap.service.SimServiceResponse;
+import com.google.gson.JsonSyntaxException;
+
+import java.io.IOException;
+
 /**
  * Simbola Connection class
  * Created by Faraj on 3/20/14.
@@ -70,7 +74,7 @@ public class SimConnection {
      * Login with the details provided
      * @return Is Logged
      */
-    public boolean login(){
+    public boolean login() throws JsonSyntaxException, IOException{
         SimServiceClient client = new SimServiceClient(this, "system", "auth", "login");
         client.addParam("username", username);
         client.addParam("password", password);
@@ -78,14 +82,14 @@ public class SimConnection {
         if(response.checkStatusOk()){
             this.session = new SimSession(
                     response.getResponse("username", String.class),
-                    response.getResponse("skey", String.class));            
+                    response.getResponse("skey", String.class));
             return true;
         }else{
             return false;
         }
     }
 
-    public boolean logout(){
+    public boolean logout() throws JsonSyntaxException, IOException{
         SimServiceClient client = new SimServiceClient(this, "system", "auth", "logout");
         SimServiceResponse response = client.execute();
         if(response.checkStatusOk()){
