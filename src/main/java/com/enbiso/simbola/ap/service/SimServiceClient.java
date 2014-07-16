@@ -6,7 +6,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 
@@ -14,7 +13,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -66,6 +64,7 @@ public class SimServiceClient {
      */
     public SimServiceClient(SimConnection connection, String module, String service, String action) {
         this(connection);
+        this.params = new HashMap();
         this.newSource(module, service, action);
     }
     
@@ -81,16 +80,23 @@ public class SimServiceClient {
     }
     
     /**
+     * Clear parameters
+     */
+    public void clearParams(){
+        this.params.clear();
+    }
+    
+    /**
      * Setup new service source
      * @param module Module name
      * @param service Service name
      * @param action Action name
      */
     public final void newSource(String module, String service, String action){
+        clearParams();
         this.module = module;
         this.service = service;
         this.action = action;
-        this.params = new HashMap();
     }
 
     /**
