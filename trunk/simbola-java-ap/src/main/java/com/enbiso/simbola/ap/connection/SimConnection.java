@@ -18,7 +18,7 @@ public class SimConnection {
     /**
      * Connection URL, the base URL of the Simbola Application
      */
-    private final String connectionUrl;
+    private String connectionUrl;
     /**
      * Username
      */
@@ -34,11 +34,18 @@ public class SimConnection {
 
     /**
      * Sim Connection constructor
+     */
+    public SimConnection() {
+        this.session = new SimSession(GUEST_USERNAME, "");        
+    }
+
+    /**
+     * Sim Connection constructor
      * @param connectionUrl Connection URL
      */
     public SimConnection(String connectionUrl){
-        this.connectionUrl = connectionUrl;
-        this.session = new SimSession(GUEST_USERNAME, "");
+        this();
+        this.setConnectionUrl(connectionUrl);
     }
 
     /**
@@ -53,11 +60,19 @@ public class SimConnection {
     }
 
     /**
+     * Set Connection URL
+     * @param connectionUrl Connection URL
+     */
+    public final void setConnectionUrl(String connectionUrl) {
+        this.connectionUrl = connectionUrl;
+    }
+    
+    /**
      * Set Login details
      * @param username Username
      * @param password Password
      */
-    public void setLoginCredentials(String username, String password){
+    public final void setLoginCredentials(String username, String password){
         this.username = username;
         this.password = password;
     }
@@ -73,6 +88,7 @@ public class SimConnection {
     /**
      * Login with the details provided
      * @return Is Logged
+     * @throws java.io.IOException
      */
     public boolean login() throws JsonSyntaxException, IOException{
         SimServiceClient client = new SimServiceClient(this, "system", "auth", "login");
