@@ -8,11 +8,11 @@ public class SimSession {
     /**
      * Username
      */
-    private String username;
+    private final String username;
     /**
      * Session key
      */
-    private String skey;
+    private final String skey;
 
     /**
      * Create a simbola session instance

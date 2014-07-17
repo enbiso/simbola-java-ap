@@ -128,6 +128,7 @@ public class SimServiceClient {
     /**
      * Execute the service call
      * @return Simbola Response
+     * @throws java.io.IOException
      */
     public SimServiceResponse execute() throws JsonSyntaxException, IOException{
         Gson gson = new Gson();
@@ -163,7 +164,7 @@ public class SimServiceClient {
      */
     private static String convertInputStreamToString(InputStream inputStream) throws IOException{
         BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
-        String line = "";
+        String line;
         String result = "";
         while((line = bufferedReader.readLine()) != null)
             result += line;
