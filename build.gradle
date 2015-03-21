@@ -1,0 +1,31 @@
+buildscript {
+    repositories {        
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+jar {
+    baseName = 'simbola-java-ap'
+    version =  '0.1.0'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {    
+    compile("org.apache.httpcomponents:httpclient:4.3.4")
+	compile("com.google.code.gson:gson:2.2.4")
+    
+    testCompile("junit:junit:4.11")
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.11'
+}
